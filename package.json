@@ -1,7 +1,7 @@
 {
   "name": "emdash-plugin-deploy-trigger",
-  "version": "0.1.0",
-  "description": "EmDash 用: cron でデプロイフック（Cloudflare Pages など）を定期的に呼ぶネイティブプラグイン",
+  "version": "0.1.1",
+  "description": "EmDash plugin that calls a deploy hook (e.g. Cloudflare Pages) on a cron schedule",
   "type": "module",
   "exports": {
     ".": "./index.js"
@@ -18,7 +18,7 @@
     "LICENSE"
   ],
   "peerDependencies": {
-    "emdash": ">=1.1.0"
+    "emdash": ">=1.1.0 <2"
   },
   "devDependencies": {
     "vite": "^8.0.0",

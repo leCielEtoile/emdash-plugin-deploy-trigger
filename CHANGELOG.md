@@ -5,10 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.1.1] - 2026-10-11
 
 ### Changed
 
+- The package `description` is now in English.
+- The `emdash` peer dependency range now has an upper bound: `>=1.1.0 <2`.
 - Retries now happen only when the request provably never reached the server (connection refused, DNS failure, connect timeout) and on 429 (honoring `Retry-After`). Timeouts, 5xx and other errors are no longer retried, to avoid starting the build more than once.
 - `DEPLOY_HOOK_URL` must be an https URL; other schemes are skipped with a warning.
 - Default log messages are now English. Use the new `messages` option to override them (a Japanese set is in README.ja.md).
@@ -38,4 +40,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Retries on 5xx, 429 and network errors (up to 3 retries, exponential backoff); logs only the host name.
 - Options: `schedule` (UTC cron expression) and `allowedHosts`.
 
+[0.1.1]: https://github.com/leCielEtoile/emdash-plugin-deploy-trigger/releases/tag/v0.1.1
 [0.1.0]: https://github.com/leCielEtoile/emdash-plugin-deploy-trigger/releases/tag/v0.1.0
