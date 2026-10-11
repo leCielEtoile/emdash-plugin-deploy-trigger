@@ -17,7 +17,7 @@ There is **no manual "run now" feature** (no admin button, no API route). The on
 ## Requirements
 
 - Node.js >= 22
-- Peer dependency (provided by your app): `emdash >=1.1.0`. The plugin API usage was checked against the `emdash` 1.2.0 source.
+- Peer dependency (provided by your app): `emdash >=1.1.0 <2`. The plugin API usage was checked against the `emdash` 1.2.0 source.
 
 ## Installation
 
