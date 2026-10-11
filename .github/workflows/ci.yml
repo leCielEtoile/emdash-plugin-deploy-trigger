@@ -1,0 +1,33 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+# アクションはコミット SHA で固定している（末尾のコメントが対応するタグ）。更新は Dependabot（.github/dependabot.yml）が SHA ごと提案する。
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: ["22", "24"]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      # pnpm のバージョンは package.json の packageManager から読まれる
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          # 24 の枠は .nvmrc（開発環境と同じ固定バージョン）、22 の枠は最新の 22.x
+          node-version: ${{ matrix.node == '24' && '' || matrix.node }}
+          node-version-file: ${{ matrix.node == '24' && '.nvmrc' || '' }}
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm check
+      - run: pnpm test

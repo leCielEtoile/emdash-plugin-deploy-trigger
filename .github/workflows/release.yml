@@ -1,0 +1,80 @@
+name: Release
+
+# タグ（v*）の push で npm へ公開する。npm の Trusted Publishing（OIDC）を使うため NPM_TOKEN は不要。
+# 事前に npmjs.com 側で、このリポジトリ・ワークフローファイル名 release.yml・環境名 npm-publish を Trusted Publisher として登録しておくこと。
+# 新規パッケージは Trusted Publisher の登録前にパッケージ自体が存在している必要があるため、初回のみ手動で公開する（README の Maintainers 節を参照）。
+# アクションはコミット SHA で固定している（末尾のコメントが対応するタグ）。更新は Dependabot が SHA ごと提案する。
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: read
+
+jobs:
+  # 依存のインストールとテストはここだけで行う。OIDC トークン（id-token）は与えない。キャッシュも使わない。
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: タグのコミットが origin/main の祖先であることを確認
+        run: |
+          if ! git merge-base --is-ancestor "${GITHUB_SHA}" origin/main; then
+            echo "タグ ${GITHUB_REF_NAME} のコミット ${GITHUB_SHA} は main に含まれていません" >&2
+            exit 1
+          fi
+      - name: タグと package.json の version が一致することを確認
+        run: |
+          PKG_VERSION="$(node -p "require('./package.json').version")"
+          if [ "v${PKG_VERSION}" != "${GITHUB_REF_NAME}" ]; then
+            echo "タグ ${GITHUB_REF_NAME} と package.json の version v${PKG_VERSION} が一致しません" >&2
+            exit 1
+          fi
+      # pnpm のバージョンは package.json の packageManager から読まれる
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm check
+      - run: pnpm test
+      - name: tarball を作成
+        run: pnpm pack --pack-destination "${RUNNER_TEMP}/pack"
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: package-tarball
+          path: ${{ runner.temp }}/pack/*.tgz
+          if-no-files-found: error
+          retention-days: 7
+
+  # 公開だけを行う。checkout も pnpm install もしない（依存コードをこのジョブで実行しない）。id-token はこのジョブにだけ与える。
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    environment: npm-publish
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: "24"
+          registry-url: https://registry.npmjs.org
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: package-tarball
+          path: ${{ runner.temp }}/pack
+      # Trusted Publishing には npm 11.5.1 以上が必要。メジャーを固定する
+      - name: npm を更新
+        run: npm install -g npm@11
+      - name: 公開
+        run: |
+          set -eu
+          TARBALLS="$(ls "${RUNNER_TEMP}"/pack/*.tgz)"
+          if [ "$(printf '%s\n' "${TARBALLS}" | wc -l)" -ne 1 ]; then
+            echo "tarball が 1 つではありません: ${TARBALLS}" >&2
+            exit 1
+          fi
+          npm publish "${TARBALLS}" --provenance --access public

@@ -1,0 +1,58 @@
+{
+  "name": "emdash-plugin-deploy-trigger",
+  "version": "0.1.0",
+  "description": "EmDash 用: cron でデプロイフック（Cloudflare Pages など）を定期的に呼ぶネイティブプラグイン",
+  "type": "module",
+  "exports": {
+    ".": "./index.js"
+  },
+  "files": [
+    "index.js",
+    "runtime.js",
+    "deploy.js",
+    "config.js",
+    "schedule.js",
+    "README.md",
+    "README.ja.md",
+    "CHANGELOG.md",
+    "LICENSE"
+  ],
+  "peerDependencies": {
+    "emdash": ">=1.1.0"
+  },
+  "devDependencies": {
+    "vite": "^8.0.0",
+    "vitest": "^5.0.3"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "check": "node scripts/check-package.mjs"
+  },
+  "license": "MIT",
+  "author": "leCielEtoile",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/leCielEtoile/emdash-plugin-deploy-trigger.git"
+  },
+  "homepage": "https://github.com/leCielEtoile/emdash-plugin-deploy-trigger#readme",
+  "bugs": {
+    "url": "https://github.com/leCielEtoile/emdash-plugin-deploy-trigger/issues"
+  },
+  "keywords": [
+    "emdash",
+    "emdash-plugin",
+    "deploy",
+    "deploy-hook",
+    "cron",
+    "webhook",
+    "cloudflare-pages"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "packageManager": "pnpm@12.4.2"
+}

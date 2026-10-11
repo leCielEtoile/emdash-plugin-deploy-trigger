@@ -1,0 +1,6 @@
+# このパッケージを単独で開発・テストするための設定
+# ピア依存（emdash 等）は利用側アプリが提供するので自動インストールしない。
+autoInstallPeers: false
+# esbuild（vite 経由）のビルドスクリプトのみ許可する
+allowBuilds:
+  esbuild: true

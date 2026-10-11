@@ -1,0 +1,15 @@
+version: 2
+updates:
+  # 公開直後の新バージョンは取り込まず、cooldown 期間（日）を置いてから提案する（侵害されたリリースの即時取り込みを避ける）
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 7
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 7

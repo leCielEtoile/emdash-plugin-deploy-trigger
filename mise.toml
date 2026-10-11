@@ -1,0 +1,4 @@
+# 開発用ツールのバージョン固定（mise install で揃う）。CI の Node は .nvmrc と matrix を参照する
+[tools]
+node = "24.21.0"
+pnpm = "12.4.2"

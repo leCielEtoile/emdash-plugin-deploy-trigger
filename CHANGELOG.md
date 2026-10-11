@@ -1,0 +1,41 @@
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [Unreleased]
+
+### Changed
+
+- Retries now happen only when the request provably never reached the server (connection refused, DNS failure, connect timeout) and on 429 (honoring `Retry-After`). Timeouts, 5xx and other errors are no longer retried, to avoid starting the build more than once.
+- `DEPLOY_HOOK_URL` must be an https URL; other schemes are skipped with a warning.
+- Default log messages are now English. Use the new `messages` option to override them (a Japanese set is in README.ja.md).
+- The plugin `version` is read from `package.json`.
+- The package check now inspects the files `pnpm pack` would publish (including `test/`), detects spelling variants of app-specific names, and catches more ways of referencing files outside the package.
+
+### Added
+
+- Logs include the host name, HTTP status, error name, attempt count and a `reason` classification (never the URL or exception message). The final failure is logged with `error`.
+- Schedule validation: only 5-field cron expressions, with a minimum interval of 15 minutes. New option `minIntervalMinutes` adjusts the limit.
+- New option `messages` to override log messages.
+- `DEPLOY_HOOK_URL` falls back to `virtual:emdash/env` when `process.env` has no value.
+- Tests for `runtime.js` and `index.js` driven by a mock `ctx`.
+- Setup, verification and maintainer instructions in the README. `README.ja.md` and `CHANGELOG.md` are now included in the published package.
+
+### Security
+
+- GitHub Actions are pinned to commit SHAs. The release workflow is split into a build job (no `id-token`) and a publish job (`id-token` only there, no dependency install), verifies that the tag is on `main` and matches `package.json`, and pins `npm@11`.
+- Dependabot has a 7-day cooldown.
+
+## [0.1.0] - 2026-10-10
+
+### Added
+
+- Initial release.
+- Native EmDash plugin that registers a `daily-deploy` cron task on activation and POSTs to the deploy hook in `DEPLOY_HOOK_URL`.
+- Retries on 5xx, 429 and network errors (up to 3 retries, exponential backoff); logs only the host name.
+- Options: `schedule` (UTC cron expression) and `allowedHosts`.
+
+[0.1.0]: https://github.com/leCielEtoile/emdash-plugin-deploy-trigger/releases/tag/v0.1.0
