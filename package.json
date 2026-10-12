@@ -1,6 +1,6 @@
 {
   "name": "emdash-plugin-deploy-trigger",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "EmDash plugin that calls a deploy hook (e.g. Cloudflare Pages) on a cron schedule",
   "type": "module",
   "exports": {

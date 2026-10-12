@@ -16,21 +16,13 @@ EmDash 用のネイティブプラグイン。cron でデプロイフック（Cl
 
 ## インストール
 
-npm にはまだ公開していない。GitHub からリリースタグを指定して入れる:
-
-```bash
-pnpm add github:leCielEtoile/emdash-plugin-deploy-trigger#semver:v0.1.0
-```
-
-### npm 公開後
-
-リリースノートに npm 公開済みと書かれた後は、名前でも入れられる:
+npm から入れる:
 
 ```bash
 pnpm add emdash-plugin-deploy-trigger
 ```
 
-公開済みとリリースノートに書かれるまでは実行しないこと（それまで npm 上のこの名前は本プロジェクトの管理下にない）。
+リリースはこのリポジトリのリリースワークフローが [npm provenance](https://docs.npmjs.com/generating-provenance-statements) 付きで公開するため、npm のページは `github.com/leCielEtoile/emdash-plugin-deploy-trigger` を指す。バージョンを固定するときは `pnpm add emdash-plugin-deploy-trigger@<バージョン>`（例: `0.1.2`）とする。
 
 ピア依存: `emdash >=1.1.0 <2`（プラグイン API の利用は `emdash` 1.2.0 のソースで確認）。
 
