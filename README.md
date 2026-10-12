@@ -21,21 +21,13 @@ There is **no manual "run now" feature** (no admin button, no API route). The on
 
 ## Installation
 
-The package is not on the npm registry yet. Install it straight from GitHub, pinned to a release tag:
-
-```bash
-pnpm add github:leCielEtoile/emdash-plugin-deploy-trigger#semver:v0.1.0
-```
-
-### After the package is published to npm
-
-Once the release notes say the package is on npm, you can install it by name instead:
+Install it from npm:
 
 ```bash
 pnpm add emdash-plugin-deploy-trigger
 ```
 
-Do not run this before the release notes say so: until then, that name on npm is not controlled by this project.
+Releases are published by this repository's release workflow with [npm provenance](https://docs.npmjs.com/generating-provenance-statements), so the npm page links back to `github.com/leCielEtoile/emdash-plugin-deploy-trigger`. To pin a specific version, use `pnpm add emdash-plugin-deploy-trigger@<version>` (for example `0.1.2`).
 
 ## Setup
 
