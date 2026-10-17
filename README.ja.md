@@ -136,6 +136,7 @@ pnpm check   # `pnpm pack` で公開される同梱ファイルの検査（分�
 
 - リリースは `main` 上の `v*` タグから `.github/workflows/release.yml` が npm Trusted Publishing（トークン不要）で公開する。npmjs.com で、このリポジトリ・ワークフローファイル `release.yml`・環境名 `npm-publish` を Trusted Publisher に登録し、GitHub のリポジトリ設定に `npm-publish` 環境を作る。
 - Trusted Publisher の登録にはパッケージが存在している必要があるため、初回バージョンだけ手動で公開する。
+- GitHub Release には tarball と、`pnpm sbom` で生成した SBOM（CycloneDX の `sbom.cdx.json`、SPDX の `sbom.spdx.json`）を添付する。署名（attestation）は CycloneDX のみ。`gh attestation verify <tarball> -R leCielEtoile/emdash-plugin-deploy-trigger --predicate-type https://cyclonedx.org/bom` で検証できる。
 - リポジトリ設定（Settings > Code security）で **Private vulnerability reporting を有効化する**。[SECURITY.md](./SECURITY.md) はこれを前提にしている。
 - 固有名の検査は、任意の外部ファイル `.check-package.private-terms`（gitignore 済み・1行1語。環境変数 `CHECK_PACKAGE_PRIVATE_TERMS_FILE` でも指定可）を使って `pnpm check` が行う。ファイルが無ければこの検査はスキップされる。
 
